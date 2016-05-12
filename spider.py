@@ -1,6 +1,7 @@
 from urllib.request import urlopen
 from link_finder import LinkFinder
 from general import *
+from domain import *
 
 class Spider:
 
@@ -34,12 +35,16 @@ class Spider:
     @staticmethod
     def crawl_page(thread_name, page_url):
         if page_url not in Spider.crawled:
-            print(thread_name + ' now Crawling ' + page_url)
-            print('Queue ' + str(len(Spider.queue)) + ' | Crawled ' + str(len(Spider.crawled)))
-            Spider.add_links_to_queue(Spider.gather_links(page_url))
-            Spider.queue.remove(page_url)
-            Spider.crawled.add(page_url)
-            Spider.update_files()
+            try:
+                uprint(thread_name + ' now Crawling '+page_url)
+                print('Queue ' + str(len(Spider.queue)) + ' | Crawled ' + str(len(Spider.crawled)))
+                Spider.add_links_to_queue(Spider.gather_links(page_url))
+                Spider.queue.remove(page_url)
+                Spider.crawled.add(page_url)
+                Spider.update_files()
+            except Exception as e:
+                print(str(e))
+                
 
 
 
@@ -50,7 +55,8 @@ class Spider:
             response = urlopen(page_url)
             if 'text/html' in response.getheader('Content-Type'):
                 html_bytes = response.read()
-                html_string = html_bytes.decode("UTF-8",errors='ignore')
+                html_string = html_bytes.decode("UTF-8")
+                #print(html_string)
             finder = LinkFinder(Spider.base_url, page_url)
             finder.feed(html_string)
         except Exception as e:
@@ -65,7 +71,7 @@ class Spider:
                 continue
             if url in Spider.crawled:
                 continue
-            if Spider.domain_name not in url:
+            if Spider.domain_name !=get_domain_name(url):
                 continue
             Spider.queue.add(url)
 

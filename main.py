@@ -1,11 +1,15 @@
+# -*- coding: utf-8 -*-
 import threading
 from queue import Queue
 from spider import Spider
 from domain import *
 from general import *
 
-PROJECT_NAME = 'ZOMATO'
+'''PROJECT_NAME = 'ZOMATO'
 HOMEPAGE = 'http://www.zomato.com/'
+'''
+PROJECT_NAME = input("Enter the name of the project : ")
+HOMEPAGE = input("Enter the link of the website you want to crawl. E.g. 'http://www.zomato.com/' : ")
 DOMAIN_NAME = get_domain_name(HOMEPAGE)
 QUEUE_FILE = PROJECT_NAME + '/queue.txt'
 CRAWLED_FILE = PROJECT_NAME + '/crawled.txt'
